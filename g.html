@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة عمر الطالب</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: calc(100% - 22px);
+            margin: 5px 0 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>حاسبة عمر الطالب بين تاريخين</h1>
+        
+        <label for="birthDay">يوم الميلاد:</label>
+        <input type="number" id="birthDay" placeholder="مثل 1" required>
+        
+        <label for="birthMonth">شهر الميلاد:</label>
+        <input type="number" id="birthMonth" placeholder="مثل 10" required>
+
+        <label for="birthYear">سنة الميلاد:</label>
+        <input type="number" id="birthYear" placeholder="مثل 2000" required>
+        
+        <label for="checkDay">يوم التاريخ المحدد:</label>
+        <input type="number" id="checkDay" placeholder="مثل 1" required>
+        
+        <label for="checkMonth">شهر التاريخ المحدد:</label>
+        <input type="number" id="checkMonth" placeholder="مثل 10" required>
+
+        <label for="checkYear">سنة التاريخ المحدد:</label>
+        <input type="number" id="checkYear" placeholder="مثل 2024" required>
+        
+        <button onclick="calculateAge()">احسب العمر</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const birthDay = parseInt(document.getElementById("birthDay").value);
+            const birthMonth = parseInt(document.getElementById("birthMonth").value);
+            const birthYear = parseInt(document.getElementById("birthYear").value);
+            
+            const checkDay = parseInt(document.getElementById("checkDay").value);
+            const checkMonth = parseInt(document.getElementById("checkMonth").value);
+            const checkYear = parseInt(document.getElementById("checkYear").value);
+
+            // التحقق من صحة التواريخ المدخلة
+            if (birthYear < 1900 || birthYear > checkYear || birthMonth < 1 || birthMonth > 12 || birthDay < 1 || birthDay > 31 ||
+                checkYear < 1900 || checkMonth < 1 || checkMonth > 12 || checkDay < 1 || checkDay > 31) {
+                document.getElementById("result").innerText = "الرجاء إدخال تواريخ صحيحة.";
+                return;
+            }
+
+            const birthDate = new Date(birthYear, birthMonth - 1, birthDay);
+            const checkDate = new Date(checkYear, checkMonth - 1, checkDay);
+            
+            // حساب العمر
+            let ageYears = checkYear - birthYear;
+            let ageMonths = checkMonth - birthMonth;
+            let ageDays = checkDay - birthDay;
+
+            // تصحيح القيم إذا كانت الأيام سالبة
+            if (ageDays < 0) {
+                ageMonths--;
+                const lastMonth = new Date(checkYear, checkMonth - 1, 0); // الحصول على عدد الأيام في الشهر السابق
+                ageDays += lastMonth.getDate(); // إضافة عدد الأيام في الشهر السابق
+            }
+            // تصحيح القيم إذا كانت الأشهر سالبة
+            if (ageMonths < 0) {
+                ageYears--;
+                ageMonths += 12;
+            }
+
+            // عرض النتيجة
+            document.getElementById("result").innerText = `عمر الطالب في ${checkDay}/${checkMonth}/${checkYear} هو ${ageYears} سنة، ${ageMonths} شهر، ${ageDays} يوم.`;
+        }
+    </script>
+</body>
+</html>
